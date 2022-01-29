@@ -49,9 +49,9 @@ public class menu_re {
 	            String temps="";
 	            //문자열 길이 만큼 반복
 	            for (int i=0;i<c.length;i++)temps+=c[i];
-	            //map.put(2, 
+	            //각 알파벳이 나오면 value + 1
 	            map.put(temps,map.getOrDefault(temps,0)+1);
-	            //
+	            //Max값 을 m에 대입
 	            m = Math.max(m,map.get(temps));
 	            return;
 	        }
@@ -61,5 +61,7 @@ public class menu_re {
 	            find(cnt+1,str+now,targetNum,i+1,word);
 	        }
 	    }
+	    //1,A,0,1,AC
+	    //
 	
 }
