@@ -15,6 +15,9 @@ public class search_rank {
         String[][] Info = new String[info.length][5];
         String[][] Query = new String[query.length][5];
         String pass = "-";
+
+        int person = 0;
+        int Score = 0;
         //배열화 및 문장 검열
         for(int i=0; i<info.length; i++) {
             query[i] = query[i].replace(" and","");
@@ -23,25 +26,33 @@ public class search_rank {
         }
         //Score가 5면 (조건이 5가지 모두 충족하면 person +1 ) 후 배열에 값 대입
         for(int Q = 0; Q<Query.length; Q++) {
-        	int person = 0;
+        	person = 0;
         	for(int i=0; i<Info.length; i++) {
-        		int Score = 0;
-            	for(int q=0; q<Query[Q].length; q++) {
-            		if(q == 4) {
-            			if(Integer.parseInt(Info[i][q]) >= Integer.parseInt(Query[Q][q]) ) {
-            				Score += 1;
-            			}
-            		}else if(Query[Q][q].equals(pass) || Info[i][q].equals(Query[Q][q])) {
-            			Score += 1;
-            		}
-            	}
+        		Score = score(Query[Q], Info[i], pass);
+            	
             	if(Score >= 5) {
             		person += 1;
             	}
             }
         	answer[Q] = person;
         }
-        
         return answer;
     }
+	
+	public static int score(String[] Query, String[] Info, String pass) {
+		int Score = 0;
+		
+		for(int q=0; q<Query.length; q++) {
+    		if(q == 4) {
+    			if(Integer.parseInt(Info[q]) >= Integer.parseInt(Query[q]) ) {
+    				Score += 1;
+    			}
+    		}else if(Query[q].equals(pass) || Info[q].equals(Query[q])) {
+    			Score += 1;
+    		}
+    	}
+		
+		
+		return Score;
+	}
 }
