@@ -7,8 +7,8 @@ import java.util.Map;
 
 public class jacad_news {
 	public static void main(String[] args) {
-		String str1 = "E=M*C^2";
-		String str2 = "e=m*c^2";
+		String str1 = "handshake";
+		String str2 = "shake hands";
 		System.out.println(solution(str1, str2));
 	}
 	
@@ -44,14 +44,16 @@ public class jacad_news {
 	          }
 	          union.add(s);
 	      }
+	      
 	      for(String s : Str2){
 	          union.add(s);
 	      }
-	      
-	      if(union.size() == 0 ) {
-	    	  return 1*65536;
+	      double jakard = 0;
+	      if(union.size() == 0) {
+	          jakard = 1;
+	      } else {
+	          jakard = (double)intersection.size() / (double)union.size();
 	      }
-	      
-	      return (intersection.size()/union.size()) * 65536;
+	      return (int)(jakard * 65536);
 	}
 }
