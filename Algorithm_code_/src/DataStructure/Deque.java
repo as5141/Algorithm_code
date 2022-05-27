@@ -14,41 +14,41 @@ package DataStructure;
 public class Deque implements Dequeimpl{
 	
 	private int dequeSize;
-	private int top;
 	private int rear;
-	private int topEmpty;
+	private int front;
 	private int rearEmpty;
+	private int frontEmpty;
 	private char[] ArrDeque;
 	
 	public Deque(int dequeSize) {
 		this.dequeSize = dequeSize;
 		ArrDeque = new char[this.dequeSize];
-		top = this.dequeSize/2 -1;
-		rear = this.dequeSize/2 +1;
+		rear = this.dequeSize/2 -1;
+		front = this.dequeSize/2 +1;
 	}
 
 	@Override
 	public boolean firstEmpty() {
 		// TODO Auto-generated method stub
-		return (rear == rearEmpty);
+		return (front == frontEmpty);
 	}
 
 	@Override
 	public boolean lastEmpty() {
 		// TODO Auto-generated method stub
-		return (top == topEmpty);
+		return (rear == rearEmpty);
 	}
 
 	@Override
 	public boolean firstFull() {
 		// TODO Auto-generated method stub
-		return (rear == 0);
+		return (front == 0);
 	}
 
 	@Override
 	public boolean lastFull() {
 		// TODO Auto-generated method stub
-		return (top == this.dequeSize-1);
+		return (rear == this.dequeSize-1);
 		
 	}
 
@@ -59,8 +59,8 @@ public class Deque implements Dequeimpl{
 			System.out.println("first Empty");
 			return 0;
 		}else {
-			System.out.println("poll_first: "+ArrDeque[rear]);
-			return ArrDeque[rear++];
+			System.out.println("poll_first: "+ArrDeque[front]);
+			return ArrDeque[front++];
 		}
 		
 	}
@@ -72,8 +72,8 @@ public class Deque implements Dequeimpl{
 			System.out.println("last Empty");
 			return 0;
 		}else {
-			System.out.println("poll_last: "+ArrDeque[top]);
-			return ArrDeque[top--];
+			System.out.println("poll_last: "+ArrDeque[rear]);
+			return ArrDeque[rear--];
 		}
 	}
 
@@ -84,8 +84,8 @@ public class Deque implements Dequeimpl{
 			System.out.println("first Empty");
 			return 0;
 		}else {
-			System.out.println("peek_first: "+ArrDeque[rear]);
-			return ArrDeque[rear];
+			System.out.println("peek_first: "+ArrDeque[front]);
+			return ArrDeque[front];
 		}
 	}
 
@@ -96,15 +96,15 @@ public class Deque implements Dequeimpl{
 			System.out.println("last Empty");
 			return 0;
 		}else {
-			System.out.println("peek_last: "+ArrDeque[top]);
-			return ArrDeque[top];
+			System.out.println("peek_last: "+ArrDeque[rear]);
+			return ArrDeque[rear];
 		}
 	}
 
 	@Override
 	public int size() {
 		// TODO Auto-generated method stub
-		return (top-rear)+1;
+		return ((rear-front)+1==-1) ? 0 : (rear-front)+1;
 	}
 
 	@Override
@@ -114,13 +114,13 @@ public class Deque implements Dequeimpl{
 			System.out.println("first Full");
 		}else {
 			//first가 첫 데이터인 경우
-			if(top == (this.dequeSize/2)-1 && rear == (this.dequeSize/2)+1 ) {
-				top++;
-				topEmpty = top;
-				rearEmpty = this.dequeSize/2 +1;
+			if(rear == (this.dequeSize/2)-1 && front == (this.dequeSize/2)+1 ) {
+				rear++;
+				rearEmpty = rear;
+				frontEmpty = this.dequeSize/2 +1;
 				System.out.println("첫데이터는 first");
 			}
-			ArrDeque[--rear] = item;
+			ArrDeque[--front] = item;
 			System.out.println("first add: "+item);
 		}
 		
@@ -133,13 +133,13 @@ public class Deque implements Dequeimpl{
 			System.out.println("last Full");
 		}else {
 			//last가 첫 데이터인 경우 
-			if(top == (this.dequeSize/2)-1 && rear == (this.dequeSize/2)+1 ) {
-				rear--;
-				rearEmpty = rear;
-				topEmpty = this.dequeSize/2 -1;
+			if(rear == (this.dequeSize/2)-1 && front == (this.dequeSize/2)+1 ) {
+				front--;
+				frontEmpty = front;
+				rearEmpty = this.dequeSize/2 -1;
 				System.out.println("첫데이터는 last");
 			}
-			ArrDeque[++top] = item;
+			ArrDeque[++rear] = item;
 			System.out.println("last add: "+item);
 		}
 	}
@@ -148,11 +148,16 @@ public class Deque implements Dequeimpl{
 	public char removeFirst() {
 		// TODO Auto-generated method stub
 		if(firstEmpty()) {
-			System.out.println("first Empty");
+			if(lastEmpty()) {
+				//front, rear 초기화
+				reset();
+			}else {
+				System.out.println("first Empty");
+			}
 			return 0;
 		}else {
-			System.out.println("first remove: "+ArrDeque[rear]);
-			return ArrDeque[rear++];
+			System.out.println("first remove: "+ArrDeque[front]);
+			return ArrDeque[front++];
 		}
 	}
 
@@ -160,20 +165,30 @@ public class Deque implements Dequeimpl{
 	public char removeLast() {
 		// TODO Auto-generated method stub
 		if(lastEmpty()) {
-			System.out.println("last Empty");
+			if(firstEmpty()) {
+				//front, rear 초기화
+				reset();
+			}else {
+				System.out.println("last Empty");
+			}
 			return 0;
 		}else {
-			System.out.println("last remove: "+ ArrDeque[top]);
-			return ArrDeque[top--];
+			System.out.println("last remove: "+ ArrDeque[rear]);
+			return ArrDeque[rear--];
 		}
 		
 	}
 	
 	public void printDeque() {
-		for(int i=rear; i<=top; i++) {
+		for(int i=front; i<=rear; i++) {
 			System.out.print(ArrDeque[i]+" ");
 		}
 		System.out.println();
+	}
+	
+	public void reset() {
+		rear = this.dequeSize/2 -1;
+		front = this.dequeSize/2 +1;
 	}
 	
 	public static void main(String[] args) {
@@ -199,7 +214,6 @@ public class Deque implements Dequeimpl{
 		arrDeque.peekFirst();
 		arrDeque.peekLast();
 		arrDeque.printDeque();
-		System.out.println(arrDeque.size());
 		
 	}
 	

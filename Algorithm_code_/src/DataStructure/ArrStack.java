@@ -74,6 +74,16 @@ public class ArrStack implements Stack {
 		return ArrStack[top];
 	}
 	
+	@Override
+	public boolean contains(char item) {
+		for(int i=0; i<=top; i++) {
+			if(item == ArrStack[i]) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void printArrStack() {
 		for(int i=0; i<=top; i++) {
 			System.out.print(ArrStack[i]+" ");
@@ -103,6 +113,8 @@ public class ArrStack implements Stack {
 		b = arrStack.pop();
 		System.out.println("b: "+b);
 		arrStack.push('A');
+		arrStack.printArrStack();
+		System.out.println("A가 있는가? "+arrStack.contains('A'));
 		arrStack.clear();
 		arrStack.printArrStack();
 		arrStack.clear();
